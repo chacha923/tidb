@@ -351,13 +351,13 @@ func (b *builtinWeekDaySig) vecEvalInt(input *chunk.Chunk, result *chunk.Column)
 			continue
 		}
 		if ds[i].IsZero() {
-			if err = handleInvalidTimeError(b.ctx, types.ErrWrongValue.GenWithStackByArgs(types.DateTimeStr, ds[i].String())); err != nil {
+			if err = handleInvalidTimeError(b.ctx, types.ErrIncorrectDatetimeValue.GenWithStackByArgs(ds[i].String())); err != nil {
 				return err
 			}
 			result.SetNull(i, true)
 			continue
 		}
-		i64s[i] = int64((ds[i].Weekday() + 6) % 7)
+		i64s[i] = int64((ds[i].Time.Weekday() + 6) % 7)
 	}
 	return nil
 }
